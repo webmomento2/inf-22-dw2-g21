@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  app_bd:
+    container_name: authmysql
+    image: mysql:5.7-oracle
+    volumes:
+      - test-data:/var/lib/mysql
+      - ./database:/tmp/database
+    command: mysqld --init-file="/tmp/database/schema.sql"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: app_bd
+    ports:
+      - 3306:3306  
+    networks:
+      - auth-networks
+
+  myapp:
+    depends_on:
+      - app_bd
+    container_name: myapp
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    working_dir: /app
+    volumes:
+      - ./:/myapp
+    networks:
+      - auth-networks
+       
+volumes:
+  test-data:
+
+networks:
+  auth-networks:

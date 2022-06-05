@@ -1,0 +1,555 @@
+openapi: 3.0.0
+info:
+  title: inf-22-dw2-g21
+  version: 0.0.1
+  description: 'Guarde suas mídias favoritas'
+servers:
+- url: http://localhost:3000
+  description: My localhost
+  variables:
+    basePath:
+      default: /
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      required:
+      - apiKey
+      properties:
+        id:
+          type: integer
+          format: int64
+        apiKey:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+      additionalProperties: false
+    Filme:
+      title: Filme
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        ano:
+          type: string
+        genero:
+          type: string
+      required:
+        - nome
+        - ano
+      additionalProperties: false
+    Serie:
+      title: Serie
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        ano:
+          type: string
+        genero:
+          type: string
+      required:
+        - nome
+        - ano
+      additionalProperties: false
+  examples:
+    FilmeExemplo01:
+      value:
+        id: 1
+        nome: Exemplo 01
+        ano: '2000'
+        genero: comédia
+    FilmeExemplo02:
+      value:
+        id: 1
+        nome: Exemplo 02
+        ano: '1990'
+        genero: drama
+    SerieExemplo01:
+      value:
+        id: 1
+        nome: Exemplo 01
+        ano: '2000'
+        genero: comédia
+    SerieExemplo02:
+      value:
+        id: 1
+        nome: Exemplo 02
+        ano: '1990'
+        genero: drama
+    UserExemplo01:
+      value:
+        id: 1
+        apiKey: 'teste'
+        username: 'teste'
+        email: 'teste2teste'
+    UserExemplo02:
+      value:
+        id: 2
+        apiKey: 'teste'
+        username: 'teste'
+        email: 'teste2teste'
+paths:
+  /filmes:
+    get:
+      tags:
+        - FilmesController
+      operationId: retrieveFilmes
+      summary: Retrieve filmes
+      responses:
+        '200':
+          description: Array of Filmes model instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'
+                xml:
+                  name: Filmes
+    post:
+      tags:
+        - FilmesController
+      operationId: createFilme
+      summary: Create filme
+      responses:
+        '200':
+          description: Creat a Filme model instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Filme'
+  /filmes/{id}:
+    get:
+      tags:
+        - FilmesController
+      operationId: retrieveFilme
+      summary: Retrieve filme
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Retrieve Filme id 1
+            two:
+              value: 2
+              summary: Retrieve Filme id 2
+    put:
+      tags:
+        - FilmesController
+      operationId: updateFilme
+      summary: Update filme
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: Filme PUT success
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Update Filme id 1
+            two:
+              value: 2
+              summary: Update Filme id 2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+            examples:
+              FilmeExample01:
+                $ref: '#/components/examples/FilmeExemplo01'
+              FilmeExample02:
+                $ref: '#/components/examples/FilmeExemplo02'
+    delete:
+      tags:
+        - FilmesController
+      operationId: deleteFilme
+      summary: Delete filme
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Delete Filme id 1
+            two:
+              value: 2
+              summary: Delete Filme id 2
+  /series:
+    get:
+      tags:
+        - SeriesController
+      operationId: retrieveSeries
+      summary: Retrieve series
+      responses:
+        '200':
+          description: Array of Series model instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Serie'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Serie'
+                xml:
+                  name: Series
+    post:
+      tags:
+        - SeriesController
+      operationId: createSerie
+      summary: Create serie
+      responses:
+        '200':
+          description: Creat a Serie model instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Serie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Serie'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Serie'
+  /series/{id}:
+    get:
+      tags:
+        - SeriesController
+      operationId: retrieveSerie
+      summary: Retrieve serie
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Serie'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Retrieve Serie id 1
+            two:
+              value: 2
+              summary: Retrieve Serie id 2
+    put:
+      tags:
+        - SeriesController
+      operationId: updateSerie
+      summary: Update serie
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: Serie PUT success
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Update Serie id 1
+            two:
+              value: 2
+              summary: Update Serie id 2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Serie'
+            examples:
+              FilmeExample01:
+                $ref: '#/components/examples/SerieExemplo01'
+              FilmeExample02:
+                $ref: '#/components/examples/SerieExemplo02'
+    delete:
+      tags:
+        - SeriesController
+      operationId: deleteSerie
+      summary: Delete serie
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Delete Serie id 1
+            two:
+              value: 2
+              summary: Delete Serie id 2
+  /users/:
+    get:                 
+      tags:               
+        - User            
+      summary: Access to unsecured resource
+      security: []  # No security
+      produces:
+      - text/plain
+      responses:          
+        200:
+          description: Success Message
+    post: 
+      tags: 
+        - User 
+      summary: Access to unsecured resource
+      operationId: createUser
+      security: [] # No security
+      produces:
+        - text/plain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          required: true
+      responses:
+        "200":
+          description: Create a User model instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: User
+  /users/{id}:
+    get:
+      tags:
+      - User
+      summary: Retrieve user
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        examples:
+          one:
+            summary: Retrieve User key 1
+            value: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+    put:
+      tags:
+        - User
+      operationId: updateUser
+      summary: Update user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: user PUT success
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Update User id 1
+            two:
+              value: 2
+              summary: Update User id 2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            examples:
+              UserExamplo01:
+                $ref: '#/components/examples/UserExemplo01'
+              UserExamplo02:
+                $ref: '#/components/examples/UserExemplo02'
+    delete:
+      tags:
+        - User
+      operationId: deleteUser
+      summary: Delete user
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: id not found
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Delete User id 1
+            two:
+              value: 2
+              summary: Delete User id 2
+  /users/{id}/filmes:
+    get:
+      tags:
+        - User
+      operationId: retrieveFilmesForUsers
+      summary: Retrieve Filmes for Users
+      responses:
+        '200':
+          description: Array of Filmes model instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'
+                xml:
+                  name: Filmes
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          required: true
+          examples:
+            one:
+              value: 1
+              summary: Retrieve User id 1
+            two:
+              value: 2
+              summary: Retrieve User id 2
